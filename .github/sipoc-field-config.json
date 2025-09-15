@@ -1,0 +1,38 @@
+{
+  "field_name": "Etapa SIPOC",
+  "field_type": "dropdown",
+  "description": "Campo personalizado para categorizar issues segundo a metodologia SIPOC",
+  "options": [
+    {
+      "value": "Supply",
+      "label": "Supply (Fornecimento)",
+      "description": "Recursos e fornecedores necessários",
+      "color": "blue"
+    },
+    {
+      "value": "Input", 
+      "label": "Input (Entrada)",
+      "description": "Entradas e insumos do processo",
+      "color": "green"
+    },
+    {
+      "value": "Process",
+      "label": "Process (Processo)", 
+      "description": "Etapas e atividades do processo",
+      "color": "orange"
+    },
+    {
+      "value": "Output",
+      "label": "Output (Saída)",
+      "description": "Resultados e produtos gerados", 
+      "color": "purple"
+    },
+    {
+      "value": "Customer",
+      "label": "Customer (Cliente)",
+      "description": "Clientes e beneficiários finais",
+      "color": "red"
+    }
+  ],
+  "setup_instructions": "Consulte GITHUB_PROJECTS_SIPOC_SETUP.md para instruções detalhadas de configuração"
+}
