@@ -1,0 +1,238 @@
+---
+# 2w3-0 Sandbox Supply1 Crews Configuration
+version: "2w3-0"
+environment: "sandbox"
+system: "supply1"
+playbook: "playbook1"
+
+# Crew Definitions
+crews:
+  alpha:
+    name: "Crew Alpha - Ideação"
+    role: "ideation"
+    size:
+      min: 3
+      max: 5
+      current: 4
+    skills:
+      - "design_thinking"
+      - "brainstorming"
+      - "creative_problem_solving"
+      - "user_research"
+      - "prototyping"
+    tools:
+      - "miro"
+      - "figma"
+      - "notion"
+      - "slack"
+    metrics:
+      - "ideas_generated_per_sprint"
+      - "idea_validation_rate"
+      - "time_to_prototype"
+
+  beta:
+    name: "Crew Beta - Implementação"
+    role: "implementation"
+    size:
+      min: 5
+      max: 8
+      current: 6
+    skills:
+      - "software_development"
+      - "devops"
+      - "architecture_design"
+      - "agile_methodologies"
+      - "technical_leadership"
+    tools:
+      - "vscode"
+      - "git"
+      - "docker"
+      - "kubernetes"
+      - "jenkins"
+    metrics:
+      - "story_points_per_sprint"
+      - "code_quality_score"
+      - "deployment_frequency"
+
+  gamma:
+    name: "Crew Gamma - Validação"
+    role: "validation"
+    size:
+      min: 2
+      max: 4
+      current: 3
+    skills:
+      - "quality_assurance"
+      - "test_automation"
+      - "data_analysis"
+      - "performance_testing"
+      - "user_acceptance_testing"
+    tools:
+      - "selenium"
+      - "postman"
+      - "grafana"
+      - "jmeter"
+      - "tableau"
+    metrics:
+      - "test_coverage_percentage"
+      - "bug_detection_rate"
+      - "validation_cycle_time"
+
+# Supply Chain Configuration
+supply_chain:
+  faisca_percentage: 10
+  operational_percentage: 70
+  strategic_percentage: 20
+  
+  allocation:
+    innovation_time: "10%"
+    regular_operations: "70%"
+    strategic_projects: "20%"
+
+# Resource Management
+resources:
+  total_capacity: 100
+  distribution:
+    alpha: 25
+    beta: 50
+    gamma: 25
+  
+  faisca_protection:
+    enabled: true
+    dedicated_hours_per_week: 4
+    interrupt_free_time: true
+
+# Sandbox Environment Settings
+sandbox:
+  experiment_duration_days: 14
+  max_concurrent_experiments: 3
+  success_threshold_percentage: 75
+  
+  environments:
+    development:
+      url: "https://dev-sandbox.ideias-brutas.local"
+      resources: "limited"
+    
+    testing:
+      url: "https://test-sandbox.ideias-brutas.local"
+      resources: "full"
+
+# Communication Protocols
+communication:
+  daily_standup:
+    time: "09:00"
+    duration_minutes: 15
+    mandatory_participants: ["alpha", "beta", "gamma"]
+  
+  sprint_review:
+    frequency_days: 14
+    duration_minutes: 60
+    stakeholders_required: true
+  
+  retrospective:
+    frequency_days: 14
+    duration_minutes: 45
+    crew_specific: true
+
+# Metrics and KPIs
+metrics:
+  collection_frequency: "daily"
+  reporting_frequency: "weekly"
+  
+  kpis:
+    velocity:
+      target: 40
+      unit: "story_points_per_sprint"
+    
+    quality:
+      target: 95
+      unit: "percentage"
+    
+    innovation_index:
+      target: 5
+      unit: "successful_ideas_per_month"
+    
+    satisfaction:
+      target: 8
+      unit: "nps_score"
+
+# Escalation Rules
+escalation:
+  sandbox_to_staging:
+    criteria:
+      - "all_tests_passed"
+      - "stakeholder_approval"
+      - "documentation_complete"
+      - "security_review_passed"
+  
+  staging_to_production:
+    criteria:
+      - "performance_tests_passed"
+      - "load_tests_passed"
+      - "security_audit_complete"
+      - "rollback_plan_defined"
+
+# Workflow Definitions
+workflows:
+  idea_to_implementation:
+    phases:
+      1: "ideation"
+      2: "validation"
+      3: "implementation"
+      4: "testing"
+      5: "deployment"
+    
+    phase_owners:
+      ideation: "alpha"
+      validation: "alpha"
+      implementation: "beta"
+      testing: "gamma"
+      deployment: "beta"
+
+# Tool Integrations
+integrations:
+  slack:
+    webhook_url: "${SLACK_WEBHOOK_URL}"
+    channels:
+      - "#crew-alpha"
+      - "#crew-beta"
+      - "#crew-gamma"
+      - "#sandbox-updates"
+  
+  jira:
+    project_key: "IB"
+    boards:
+      alpha: "IB-ALPHA"
+      beta: "IB-BETA"
+      gamma: "IB-GAMMA"
+  
+  github:
+    organization: "osin5synergy-ops"
+    repositories:
+      - "ideias-brutas"
+      - "sandbox-experiments"
+
+# Security and Compliance
+security:
+  access_control:
+    role_based: true
+    multi_factor_auth: true
+  
+  data_protection:
+    encryption_at_rest: true
+    encryption_in_transit: true
+  
+  compliance:
+    frameworks: ["ISO27001", "GDPR"]
+    audit_frequency_months: 6
+
+# Maintenance and Updates
+maintenance:
+  config_review_frequency: "monthly"
+  tool_updates: "quarterly"
+  security_patches: "as_needed"
+  
+  backup:
+    frequency: "daily"
+    retention_days: 30
+    location: "secure_cloud_storage"
