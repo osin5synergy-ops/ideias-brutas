@@ -1,0 +1,33 @@
+# Generated metrics and temporary files
+*.json.bak
+*.tmp
+/tmp/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Runtime files
+*.log
+*.pid
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environment
+.env
+.venv/
+venv/
+
+# Build artifacts
+dist/
+build/
+*.egg-info/

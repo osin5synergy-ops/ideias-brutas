@@ -1,0 +1,16 @@
+{
+  "export_timestamp": "2025-09-19T16:33:10.648842",
+  "metrics": {
+    "supply_efficiency": 0.15,
+    "human_allocation": 0.1,
+    "faisca_count": 0,
+    "playbook_completion": 1.0,
+    "sandbox_stability": 0.99
+  },
+  "playbook_id": "2w3-0-sandbox-supply1-playbook5-mettrics",
+  "configuration": {
+    "phases": 5,
+    "human_allocation_baseline": "10%",
+    "sandbox_enabled": true
+  }
+}
