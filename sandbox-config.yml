@@ -1,0 +1,47 @@
+# Sandbox Configuration for Supply Metrics System
+# 2w3-0-sandbox-supply1-playbook5-mettrics
+
+sandbox:
+  name: "supply-metrics-sandbox"
+  version: "1.0.0"
+  environment: "development"
+  
+supply_config:
+  baseline_human_allocation: "10%"  # Per README requirement
+  efficiency_target: 0.85
+  monitoring_interval: "1h"
+  
+playbook_settings:
+  phases: 5
+  auto_progression: false
+  validation_required: true
+  
+metrics_collection:
+  enabled: true
+  storage: "local"
+  retention_days: 90
+  export_format: ["json", "csv"]
+  
+monitoring:
+  alerts:
+    - name: "low_efficiency"
+      threshold: 0.70
+      severity: "warning"
+    - name: "resource_shortage"
+      threshold: 0.05
+      severity: "critical"
+  
+  dashboards:
+    - name: "supply_overview"
+      refresh_rate: "5m"
+    - name: "faisca_tracker"
+      refresh_rate: "1h"
+      
+notifications:
+  channels: ["console", "log"]
+  levels: ["info", "warning", "error"]
+
+testing:
+  mock_data: true
+  simulation_mode: true
+  performance_testing: true
