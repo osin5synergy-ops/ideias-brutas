@@ -1,0 +1,31 @@
+{
+  "identifier": "2w3-0-sandbox-supply1-playbook6-meio",
+  "version": {
+    "week": 2,
+    "iteration": 3,
+    "baseline": 0
+  },
+  "environment": "sandbox",
+  "supply": {
+    "id": "supply1",
+    "allocation": {
+      "human_percentage": 10,
+      "enhancement": "A FAISCA"
+    }
+  },
+  "playbook": {
+    "version": 6,
+    "stage": "meio",
+    "procedures": [
+      "initialize_sandbox",
+      "configure_supply_chain",
+      "apply_human_factor",
+      "implement_spark_enhancement",
+      "execute_meio_validation",
+      "document_results"
+    ]
+  },
+  "status": "active",
+  "created": "2024-09-19",
+  "description": "Sandbox environment for supply chain testing with intermediate stage operations"
+}
