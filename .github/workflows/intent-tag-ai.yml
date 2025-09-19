@@ -1,0 +1,97 @@
+name: Intent Tag AI Agent
+
+on:
+  issues:
+    types: [opened, edited]
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  auto-tag:
+    runs-on: ubuntu-latest
+    name: Auto-tag issues with AI agent
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          
+      - name: Extract issue template type
+        id: template-type
+        run: |
+          # Try to determine template type from issue body or labels
+          TEMPLATE_TYPE=""
+          
+          # Check if it matches bug report pattern
+          if echo "${{ github.event.issue.body }}" | grep -q "Describe the bug\|To Reproduce\|Expected behavior"; then
+            TEMPLATE_TYPE="bug_report"
+          # Check if it matches feature request pattern  
+          elif echo "${{ github.event.issue.body }}" | grep -q "Is your feature request related to a problem\|Describe the solution you'd like"; then
+            TEMPLATE_TYPE="feature_request"
+          else
+            TEMPLATE_TYPE="custom"
+          fi
+          
+          echo "template_type=$TEMPLATE_TYPE" >> $GITHUB_OUTPUT
+          
+      - name: Run Intent Tag AI Agent
+        id: tag-analysis
+        run: |
+          # Run the AI agent to analyze the issue
+          TITLE="${{ github.event.issue.title }}"
+          BODY="${{ github.event.issue.body }}"
+          TEMPLATE_TYPE="${{ steps.template-type.outputs.template_type }}"
+          
+          # Escape quotes and newlines for Python
+          TITLE_ESCAPED=$(echo "$TITLE" | sed 's/"/\\"/g' | tr '\n' ' ')
+          BODY_ESCAPED=$(echo "$BODY" | sed 's/"/\\"/g' | tr '\n' ' ')
+          
+          # Run the Python agent
+          SUGGESTED_TAGS=$(python intent_tag_agent.py "$TITLE_ESCAPED" "$BODY_ESCAPED" "$TEMPLATE_TYPE")
+          
+          echo "Suggested tags: $SUGGESTED_TAGS"
+          echo "tags=${SUGGESTED_TAGS#Suggested tags: }" >> $GITHUB_OUTPUT
+          
+      - name: Apply tags to issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const tags = '${{ steps.tag-analysis.outputs.tags }}';
+            const tagArray = tags.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
+            
+            console.log('Applying tags:', tagArray);
+            
+            // Get current labels
+            const currentLabels = context.payload.issue.labels.map(label => label.name);
+            
+            // Merge with suggested tags (avoid duplicates)
+            const allLabels = [...new Set([...currentLabels, ...tagArray])];
+            
+            // Apply labels to the issue
+            await github.rest.issues.update({
+              owner: context.repo.owner,  
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              labels: allLabels
+            });
+            
+            // Add a comment explaining the auto-tagging
+            const commentBody = `🤖 **Intent Tag AI Agent**
+            
+            Automaticamente analisei esta issue e apliquei as seguintes tags:
+            ${tagArray.map(tag => `- \`${tag}\``).join('\n')}
+            
+            _Esta classificação foi baseada no [Agent Intent Tag-IA Playbook](./agent_intent_tag-IA.md)._`;
+            
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo, 
+              issue_number: context.issue.number,
+              body: commentBody
+            });

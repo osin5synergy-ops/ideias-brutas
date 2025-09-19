@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 🤖 Intent Tag AI Agent
+    url: https://github.com/osin5synergy-ops/ideias-brutas/blob/main/agent_intent_tag-IA.md
+    about: Saiba mais sobre como o agente de IA classifica automaticamente suas issues
