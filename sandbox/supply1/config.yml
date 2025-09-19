@@ -1,0 +1,13 @@
+version: "2w3-0"
+name: "supply1"
+description: "Supply system - 10% Humano - A FAISCA"
+type: "sandbox"
+
+supply:
+  percentage: 10
+  source: "Humano"
+  catalyst: "A FAISCA"
+  
+settings:
+  environment: "sandbox"
+  active: true
