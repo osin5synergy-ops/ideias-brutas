@@ -1,0 +1,76 @@
+name: "ideias-brutas-machines"
+version: "2w3-0"
+environment: "sandbox"
+
+integration:
+  sandbox: "2w3-0-sandbox"
+  supply_chain: "supply1"
+  playbook: "playbook5"
+
+machine_definitions:
+  compute_nodes:
+    - name: "sandbox-compute-01"
+      type: "compute"
+      specifications:
+        cpu_cores: 4
+        memory_gb: 8
+        disk_gb: 50
+        network_speed: "1Gbps"
+      configuration:
+        os: "ubuntu-22.04"
+        docker_enabled: true
+        monitoring_agent: true
+      resources:
+        humano_allocation: 10  # 10% as per supply1
+        faisca_enabled: true
+        
+  monitoring_nodes:
+    - name: "sandbox-monitor-01"
+      type: "monitoring"
+      specifications:
+        cpu_cores: 2
+        memory_gb: 4
+        disk_gb: 25
+        network_speed: "1Gbps"
+      configuration:
+        os: "ubuntu-22.04"
+        prometheus_enabled: true
+        grafana_enabled: true
+      services:
+        - name: "supply1-monitor"
+          port: 9090
+          protocol: "http"
+        - name: "resource-tracker"
+          port: 9091
+          protocol: "http"
+
+  storage_nodes:
+    - name: "sandbox-storage-01"
+      type: "storage"
+      specifications:
+        cpu_cores: 2
+        memory_gb: 4
+        disk_gb: 100
+        network_speed: "10Gbps"
+      configuration:
+        os: "ubuntu-22.04"
+        raid_level: "1"
+        backup_enabled: true
+
+networking:
+  subnet: "10.0.0.0/24"
+  gateway: "10.0.0.1"
+  dns_servers:
+    - "10.0.0.10"
+    - "8.8.8.8"
+    
+security:
+  firewall_enabled: true
+  ssh_key_auth: true
+  ssl_certificates: true
+  
+monitoring:
+  health_checks: true
+  metrics_collection: true
+  alerting: true
+  retention_days: 30

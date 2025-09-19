@@ -1,0 +1,30 @@
+name: supply1
+version: "1.0.0"
+type: supply_chain_component
+
+configuration:
+  environment: "2w3-0-sandbox"
+  
+  resources:
+    humano_percentage: 10
+    faisca_enabled: true
+    
+  tracking:
+    real_time: true
+    batch_size: 100
+    update_interval: 5000  # milliseconds
+    
+  integration:
+    sandbox_enabled: true
+    playbook_integration: "playbook5"
+    machine_support: true
+    
+  storage:
+    type: "database"
+    connection: "sandbox-db"
+    table_prefix: "supply1_"
+    
+  monitoring:
+    alerts_enabled: true
+    threshold_low: 20
+    threshold_critical: 10

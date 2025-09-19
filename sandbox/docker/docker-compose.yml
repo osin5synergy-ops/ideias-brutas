@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  sandbox-app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - NODE_ENV=development
+      - SANDBOX_MODE=true
+    volumes:
+      - ../config:/app/config:ro
+      - ./logs:/app/logs
+    depends_on:
+      - sandbox-db
+
+  sandbox-db:
+    image: postgres:15
+    environment:
+      - POSTGRES_DB=sandbox
+      - POSTGRES_USER=sandbox_user
+      - POSTGRES_PASSWORD=sandbox_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - sandbox_data:/var/lib/postgresql/data
+
+  sandbox-redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - sandbox_redis:/data
+
+volumes:
+  sandbox_data:
+  sandbox_redis:
