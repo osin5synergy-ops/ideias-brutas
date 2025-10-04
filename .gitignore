@@ -1,0 +1,77 @@
+# Oráculo do GitHub - Arquivo Nacional
+# Define o que NÃO deve ser versionado
+
+# Arquivos temporários
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Diretórios temporários
+tmp/
+temp/
+.cache/
+
+# IDE e Editores
+.vscode/
+.idea/
+*.iml
+*.sublime-project
+*.sublime-workspace
+
+# Logs
+*.log
+logs/
+*.log.*
+
+# Node.js (se usado futuramente)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# Python (se usado futuramente)
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+venv/
+env/
+ENV/
+.venv
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+
+# Sistema operacional
+Thumbs.db
+Desktop.ini
+
+# Secrets e configurações locais
+.env
+.env.local
+*.key
+*.pem
+secrets/
+credentials/
+
+# Backups
+*.bak
+*.backup
+backup/
+
+# Coverage e testes
+.coverage
+coverage/
+.pytest_cache/
+.tox/
+
+---
+# Este .gitignore é mantido pelo Oráculo do GitHub
+# Para propor mudanças, crie um noid® com label 'proposta:fine-tuning'
