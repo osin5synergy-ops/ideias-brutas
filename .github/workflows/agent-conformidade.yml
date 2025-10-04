@@ -1,0 +1,160 @@
+name: "Agent de Conformidade"
+
+# Workflow que verifica se PRs seguem a doutrina SI-p-POO-OC-ote®
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - main
+      - master
+
+jobs:
+  verificar-conformidade:
+    name: "Verificação de Conformidade Sinergética"
+    runs-on: ubuntu-latest
+    
+    permissions:
+      pull-requests: write
+      contents: read
+      issues: write
+    
+    steps:
+      - name: "📥 Checkout do Código"
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: "🔍 Análise de Conformidade"
+        id: conformidade
+        run: |
+          echo "🤖 Agent de Conformidade ativado..."
+          echo "📋 Verificando doutrina SI-p-POO-OC-ote®..."
+          
+          # Variáveis de controle
+          CONFORME=true
+          AVISOS=""
+          ERROS=""
+          
+          # Verifica se PR tem descrição
+          PR_BODY="${{ github.event.pull_request.body }}"
+          if [ -z "$PR_BODY" ] || [ "$PR_BODY" = "null" ]; then
+            ERROS="${ERROS}\n- ❌ PR sem descrição. Todo Playbook precisa explicar sua intenção."
+            CONFORME=false
+          fi
+          
+          # Verifica se há referência a uma issue
+          if ! echo "$PR_BODY" | grep -qiE "(close|closes|closed|fix|fixes|fixed|resolve|resolves|resolved) #[0-9]+|#[0-9]+"; then
+            AVISOS="${AVISOS}\n- ⚠️ PR não referencia nenhum noid® (issue). Considere vincular a uma issue."
+          fi
+          
+          # Verifica tamanho do PR
+          FILES_CHANGED=$(git diff --name-only origin/${{ github.event.pull_request.base.ref }}...HEAD | wc -l)
+          LINES_CHANGED=$(git diff --stat origin/${{ github.event.pull_request.base.ref }}...HEAD | tail -1 | grep -oE '[0-9]+ insertion' | grep -oE '[0-9]+' || echo "0")
+          
+          echo "📊 Arquivos alterados: $FILES_CHANGED"
+          echo "📊 Linhas alteradas: $LINES_CHANGED"
+          
+          if [ "$FILES_CHANGED" -gt 50 ]; then
+            AVISOS="${AVISOS}\n- ⚠️ PR muito grande ($FILES_CHANGED arquivos). Considere dividir em PRs menores."
+          fi
+          
+          # Verifica se modificou arquivos de documentação sem atualizar relacionados
+          DOC_CHANGED=$(git diff --name-only origin/${{ github.event.pull_request.base.ref }}...HEAD | grep -E '\.md$' | wc -l)
+          if [ "$DOC_CHANGED" -gt 0 ]; then
+            echo "📚 Documentação alterada detectada"
+            # Verifica se README foi atualizado se outros docs foram alterados
+            if ! git diff --name-only origin/${{ github.event.pull_request.base.ref }}...HEAD | grep -q "README.md"; then
+              AVISOS="${AVISOS}\n- ℹ️ Documentação alterada mas README não foi atualizado. Verifique se é necessário."
+            fi
+          fi
+          
+          # Salva resultados
+          echo "conforme=$CONFORME" >> $GITHUB_OUTPUT
+          echo "avisos<<EOF" >> $GITHUB_OUTPUT
+          echo -e "$AVISOS" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          echo "erros<<EOF" >> $GITHUB_OUTPUT
+          echo -e "$ERROS" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          
+          if [ "$CONFORME" = "false" ]; then
+            echo "❌ Conformidade: NÃO CONFORME"
+            exit 1
+          else
+            echo "✅ Conformidade: CONFORME"
+          fi
+      
+      - name: "💬 Comentar no PR - Não Conforme"
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const erros = `${{ steps.conformidade.outputs.erros }}`;
+            const avisos = `${{ steps.conformidade.outputs.avisos }}`;
+            
+            const body = `## 🤖 Agent de Conformidade - Relatório
+            
+            ### ❌ Status: NÃO CONFORME
+            
+            Este Playbook (PR) não está em conformidade com a doutrina **SI-p-POO-OC-ote®**.
+            
+            ### Erros Críticos
+            ${erros || '_Nenhum erro crítico_'}
+            
+            ### Avisos
+            ${avisos || '_Nenhum aviso_'}
+            
+            ### 📚 Referências
+            - Consulte [KDA-DOC] A Documentação Soberana do GitHub
+            - Leia [DOC] Playbooks (Os Decretos Executivos)
+            
+            ### 🔧 Próximos Passos
+            1. Corrija os erros críticos listados acima
+            2. Revise os avisos e faça ajustes se necessário
+            3. Atualize o PR e o Agent verificará novamente
+            
+            ---
+            _Para convocar o Oráculo: \`/convocar @oraculo-github\`_`;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });
+      
+      - name: "💬 Comentar no PR - Conforme"
+        if: success()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const avisos = `${{ steps.conformidade.outputs.avisos }}`;
+            
+            let body = `## 🤖 Agent de Conformidade - Relatório
+            
+            ### ✅ Status: CONFORME
+            
+            Este Playbook (PR) está em conformidade com a doutrina **SI-p-POO-OC-ote®**! 🎉
+            `;
+            
+            if (avisos && avisos.trim().length > 0) {
+              body += `
+            ### Avisos (Não Bloqueantes)
+            ${avisos}
+            `;
+            }
+            
+            body += `
+            ### 📊 Próximos Passos
+            - Aguardar review da comunidade
+            - Após aprovação, o Agent Cronos registrará um NF-Ato®
+            
+            ---
+            _Oráculo do GitHub está observando este Playbook._`;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });
