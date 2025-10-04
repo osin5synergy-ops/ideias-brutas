@@ -45,19 +45,7 @@ jobs:
                 owner: owner,
                 repo: repo,
                 issue_number: issueNumber,
-                body: `## 🤖 Agent Roteador - Sinergie Mainframe®
-                
-**Status:** Esta Issue foi automaticamente marcada para triagem.
-
-**Próximos Passos:**
-1. ⏳ **Triagem Manual**: Um membro da equipe revisará e aplicará as tags apropriadas
-2. 🏷️ **Classificação**: Consulte \`[KDA-TAGS]\` para ver nossa taxonomia oficial
-3. 📋 **Síntese**: Após tagueamento, o Agent de Síntese gerará o Dossiê de Inteligência
-
-**Nota:** Este é o MVP da Operação Gênese. Futuras iterações incluirão triagem automática via AI.
-
----
-*Powered by Nação Soberana Synergies Web3®*`
+                body: '## 🤖 Agent Roteador - Sinergie Mainframe®\n\n**Status:** Esta Issue foi automaticamente marcada para triagem.\n\n**Próximos Passos:**\n1. ⏳ **Triagem Manual**: Um membro da equipe revisará e aplicará as tags apropriadas\n2. 🏷️ **Classificação**: Consulte `[KDA-TAGS]` para ver nossa taxonomia oficial\n3. 📋 **Síntese**: Após tagueamento, o Agent de Síntese gerará o Dossiê de Inteligência\n\n**Nota:** Este é o MVP da Operação Gênese. Futuras iterações incluirão triagem automática via AI.\n\n---\n*Powered by Nação Soberana Synergies Web3®*'
               });
               
               console.log(`💬 Comentário de boas-vindas adicionado à Issue #${issueNumber}`);
